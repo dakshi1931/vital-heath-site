@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VitalPulse — Complete Healthcare & Daily Wellness Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --surface-alt: #f8fafc;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #0d9488;
+      --primary-dark: #0f766e;
+      --primary-light: #ccfbf1;
+      --accent: #0284c7;
+      --accent-light: #e0f2fe;
+      --success: #16a34a;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --shadow: 0 6px 24px rgba(15, 23, 42, 0.06);
+      --radius: 16px;
+    }
+
+    body.dark {
+      --bg: #0b1120;
+      --surface: #111827;
+      --surface-alt: #1e293b;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border: #293548;
+      --primary-light: #134e4a;
+      --accent-light: #0c4a6e;
+      --shadow: 0 6px 26px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+      transition: background 0.25s, color 0.25s;
+    }
+
+    a { color: var(--primary); text-decoration: none; }
+    button, input, select, textarea { font-family: inherit; font-size: 0.94rem; }
+
+    /* Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.8rem 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-weight: 800;
+      font-size: 1.22rem;
+      color: var(--primary);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 1.15rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      padding: 0.5rem 0.82rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .nav-btn:hover, .nav-btn.active {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    body.dark .nav-btn.active, body.dark .nav-btn:hover { color: #5eead4; }
+
+    .nav-actions { display: flex; align-items: center; gap: 0.55rem; }
+
+    .icon-btn {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1.05rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.12s, background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+
+    .btn:hover { background: var(--primary-dark); }
+    .btn:active { transform: scale(0.98); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { background: var(--surface-alt); }
+
+    .btn-sm { padding: 0.4rem 0.72rem; font-size: 0.84rem; border-radius: 8px; }
+
+    /* Layout */
+    .container { max-width: 1280px; margin: 0 auto; padding: 1.4rem; }
+
+    .view { display: none; animation: fadeIn 0.22s ease; }
+    .view.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #0f766e 0%, #0284c7 100%);
+      color: #fff;
+      border-radius: 22px;
+      padding: 1.85rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.4rem;
+      margin-bottom: 1.4rem;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1 { font-size: clamp(1.4rem, 2.8vw, 2.1rem); margin-bottom: 0.35rem; }
+    .hero p { opacity: 0.92; max-width: 560px; font-size: 0.95rem; }
+
+    .hero-stats { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+
+    .hero-pill {
+      background: rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(8px);
+      padding: 0.75rem 1rem;
+      border-radius: 14px;
+      min-width: 112px;
+    }
+    .hero-pill span { display: block; font-size: 0.75rem; opacity: 0.86; }
+    .hero-pill strong { font-size: 1.28rem; }
+
+    /* Grids & Cards */
+    .grid { display: grid; gap: 1.25rem; }
+    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.3rem;
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.95rem;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .card-title { font-size: 1.05rem; font-weight: 700; display: flex; align-items: center; gap: 0.45rem; }
+
+    .badge {
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+    }
+    body.dark .badge { color: #5eead4; }
+
+    /* Water Widget */
+    .water-widget { display: flex; align-items: center; gap: 1.4rem; flex-wrap: wrap; }
+    .ring-wrap { position: relative; width: 130px; height: 130px; flex-shrink: 0; }
+    .ring-wrap svg { transform: rotate(-90deg); width: 130px; height: 130px; }
+    .ring-bg { fill: none; stroke: var(--border); stroke-width: 11; }
+    .ring-progress { fill: none; stroke: var(--accent); stroke-width: 11; stroke-linecap: round; transition: stroke-dashoffset 0.4s ease; }
+    .ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .ring-center strong { font-size: 1.2rem; }
+    .ring-center span { font-size: 0.74rem; color: var(--text-muted); }
+
+    .progress-bar-wrap {
+      width: 100%;
+      height: 10px;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 0.45rem 0;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 999px;
+      transition: width 0.35s ease;
+    }
+
+    /* Forms & Inputs */
+    .form-group { margin-bottom: 0.85rem; }
+    .form-group label { display: block; font-size: 0.83rem; font-weight: 600; margin-bottom: 0.3rem; color: var(--text-muted); }
+
+    .input {
+      width: 100%;
+      padding: 0.58rem 0.82rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text);
+      outline: none;
+    }
+    .input:focus { border-color: var(--primary); }
+
+    .inline-form { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .inline-form .input { flex: 1; min-width: 110px; }
+
+    /* Lists */
+    .list { display: flex; flex-direction: column; gap: 0.52rem; max-height: 290px; overflow-y: auto; padding-right: 0.2rem; }
+    .list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.7rem;
+      padding: 0.65rem 0.85rem;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .list-item.completed span.item-label { text-decoration: line-through; color: var(--text-muted); }
+    .check-wrap { display: flex; align-items: center; gap: 0.6rem; cursor: pointer; flex: 1; }
+    .check-wrap input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--primary); cursor: pointer; }
+
+    /* Filter Pills */
+    .filter-row { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .filter-pill {
+      padding: 0.3rem 0.68rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .filter-pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    /* Moods */
+    .mood-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.45rem; margin-top: 0.45rem; }
+    .mood-btn {
+      background: var(--surface-alt);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 0.55rem 0.2rem;
+      cursor: pointer;
+      text-align: center;
+    }
+    .mood-btn span { display: block; font-size: 1.35rem; }
+    .mood-btn small { font-size: 0.7rem; color: var(--text-muted); }
+    .mood-btn.active { border-color: var(--primary); background: var(--primary-light); }
+
+    /* Breathing Circle */
+    .breath-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: var(--surface-alt);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      text-align: center;
+      margin-top: 0.75rem;
+    }
+    .breath-circle {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--primary), var(--accent));
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: transform 1s ease-in-out;
+      margin-bottom: 0.7rem;
+    }
+
+    /* Auth Page */
+    .auth-container { max-width: 470px; margin: 1.5rem auto; }
+    .auth-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--surface-alt);
+      padding: 0.3rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 1.15rem;
+    }
+    .auth-tab { border: none; background: transparent; padding: 0.6rem; border-radius: 9px; font-weight: 700; color: var(--text-muted); cursor: pointer; }
+    .auth-tab.active { background: var(--surface); color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .password-wrap { position: relative; }
+    .toggle-pw {
+      position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.82rem; font-weight: 600;
+    }
+
+    .demo-box {
+      margin-top: 1rem;
+      padding: 0.8rem;
+      border-radius: 12px;
+      background: var(--accent-light);
+      font-size: 0.84rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* Weekly Chart */
+    .chart-bars { display: flex; align-items: flex-end; justify-content: space-between; gap: 0.55rem; height: 145px; padding-top: 0.8rem; }
+    .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.35rem; height: 100%; justify-content: flex-end; }
+    .bar-fill { width: 100%; max-width: 32px; border-radius: 8px 8px 4px 4px; background: linear-gradient(180deg, var(--accent), var(--primary)); transition: height 0.4s ease; }
+    .bar-col small { font-size: 0.73rem; color: var(--text-muted); font-weight: 600; }
+
+    /* Toast & Footer */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px; background: #0f172a; color: #fff;
+      padding: 0.8rem 1.2rem; border-radius: 12px; font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.22); z-index: 999;
+      opacity: 0; transform: translateY(12px); pointer-events: none; transition: all 0.25s;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    footer {
+      margin-top: 2.5rem; padding: 1.8rem 1.4rem; border-top: 1px solid var(--border);
+      background: var(--surface); text-align: center; color: var(--text-muted); font-size: 0.88rem;
+    }
+    .disclaimer { font-size: 0.77rem; margin-top: 0.45rem; opacity: 0.85; }
+
+    @media (max-width: 820px) {
+      .navbar { flex-wrap: wrap; }
+      .nav-links { order: 3; width: 100%; overflow-x: auto; padding-top: 0.35rem; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+    @media print {
+      .navbar, .btn, .inline-form, footer { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="brand" onclick="switchView('dashboard')">
+      <div class="brand-icon">♥</div>
+      <span>VitalPulse</span>
+    </div>
+
+    <nav class="nav-links" id="navLinks">
+      <button class="nav-btn active" data-view="dashboard" onclick="switchView('dashboard')">Dashboard</button>
+      <button class="nav-btn" data-view="trackers" onclick="switchView('trackers')">Nutrition & Fitness</button>
+      <button class="nav-btn" data-view="care" onclick="switchView('care')">Doctors & Vitals</button>
+      <button class="nav-btn" data-view="tools" onclick="switchView('tools')">Calculators</button>
+      <button class="nav-btn" data-view="profile" onclick="switchView('profile')">Profile</button>
+      <button class="nav-btn" data-view="contact" onclick="switchView('contact')">Contact</button>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="icon-btn" title="Toggle Dark Mode" onclick="toggleTheme()" id="themeBtn">🌙</button>
+      <div id="authHeaderArea"></div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== VIEW 1: DASHBOARD ==================== -->
+    <section id="view-dashboard" class="view active">
+      <div class="hero">
+        <div>
+          <h1 id="welcomeHeading">Welcome to VitalPulse Healthcare</h1>
+          <p>Your all-in-one daily wellness hub — track water intake, daily routine, calories, sleep, vitals, and doctor visits.</p>
+          <div style="margin-top: 1rem; display: flex; gap: 0.55rem; flex-wrap: wrap;">
+            <button class="btn" style="background:#fff; color:#0f766e;" onclick="switchView('trackers')">Log Meals & Workout</button>
+            <button class="btn btn-outline" style="color:#fff; border-color:rgba(255,255,255,0.45);" onclick="window.print()">Print Health Report</button>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-pill">
+            <span>Health Score</span>
+            <strong id="heroScore">0 / 100</strong>
+          </div>
+          <div class="hero-pill">
+            <span>Water Today</span>
+            <strong id="heroWater">0 ml</strong>
+          </div>
+          <div class="hero-pill">
+            <span>Routine Done</span>
+            <strong id="heroRoutine">0%</strong>
+          </div>
+          <div class="hero-pill">
+            <span>Steps</span>
+            <strong id="heroSteps">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <!-- Water Intake -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">💧 Water Intake Tracker</div>
+            <div style="display:flex; gap:0.4rem; align-items:center;">
+              <button class="btn btn-sm btn-outline" onclick="enableWaterReminder()">🔔 Reminder</button>
+              <span class="badge" id="waterStatusBadge">Keep Hydrating</span>
+            </div>
+          </div>
+          <div class="water-widget">
+            <div class="ring-wrap">
+              <svg viewBox="0 0 130 130">
+                <circle class="ring-bg" cx="65" cy="65" r="54"></circle>
+                <circle class="ring-progress" id="waterRing" cx="65" cy="65" r="54" stroke-dasharray="339.29" stroke-dashoffset="339.29"></circle>
+              </svg>
+              <div class="ring-center">
+                <strong id="waterPct">0%</strong>
+                <span id="waterFraction">0 / 2500 ml</span>
+              </div>
+            </div>
+            <div style="flex:1; min-width: 210px;">
+              <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:0.7rem;">Tap below each time you drink water.</p>
+              <div style="display:flex; gap:0.45rem; flex-wrap:wrap; margin-bottom:0.8rem;">
+                <button class="btn btn-sm" onclick="addWater(250)">+ 250ml</button>
+                <button class="btn btn-sm" onclick="addWater(500)">+ 500ml</button>
+                <button class="btn btn-sm" onclick="addWater(1000)">+ 1L</button>
+                <button class="btn btn-sm btn-outline" onclick="addWater(-250)">- 250ml</button>
+              </div>
+              <div class="inline-form">
+                <input type="number" id="waterGoalInput" class="input" placeholder="Daily goal (ml)" min="500" max="8000" step="100">
+                <button class="btn btn-sm btn-outline" onclick="updateWaterGoal()">Set Goal</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Daily Routine -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">✅ Daily Health Routine</div>
+            <span class="badge" id="routineBadge">0 / 0 Done</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="routineProgressBar" style="width:0%;"></div>
+          </div>
+
+          <div class="filter-row" id="routineFilters">
+            <button class="filter-pill active" onclick="setRoutineFilter('All', this)">All</button>
+            <button class="filter-pill" onclick="setRoutineFilter('Morning', this)">Morning</button>
+            <button class="filter-pill" onclick="setRoutineFilter('Afternoon', this)">Afternoon</button>
+            <button class="filter-pill" onclick="setRoutineFilter('Evening', this)">Evening</button>
+            <button class="filter-pill" onclick="setRoutineFilter('Night', this)">Night</button>
+          </div>
+
+          <div class="inline-form" style="margin-bottom: 0.75rem;">
+            <input type="text" id="newRoutineInput" class="input" placeholder="Add daily habit (e.g., 20m Walk)">
+            <select id="newRoutineTime" class="input" style="max-width:125px;">
+              <option value="Morning">Morning</option>
+              <option value="Afternoon">Afternoon</option>
+              <option value="Evening">Evening</option>
+              <option value="Night">Night</option>
+            </select>
+            <button class="btn btn-sm" onclick="addRoutine()">Add</button>
+          </div>
+          <div class="list" id="routineList"></div>
+        </div>
+      </div>
+
+      <div class="grid grid-3" style="margin-top:1.25rem;">
+        <!-- Sleep, Mood & Breathing -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">😴 Sleep, Mood & Calm</div>
+            <span class="badge" id="sleepBadge">7.5 hrs</span>
+          </div>
+          <div class="form-group">
+            <label>Sleep Duration: <strong id="sleepSliderVal">7.5</strong> hrs</label>
+            <input type="range" min="0" max="12" step="0.5" value="7.5" id="sleepInput" class="input" style="padding:0;" oninput="updateSleep(this.value)">
+          </div>
+          <label style="font-size:0.83rem; font-weight:600; color:var(--text-muted);">Daily Mood Check-in</label>
+          <div class="mood-grid">
+            <button class="mood-btn" onclick="setMood('Energized')"><span>⚡</span><small>Energized</small></button>
+            <button class="mood-btn" onclick="setMood('Calm')"><span>😌</span><small>Calm</small></button>
+            <button class="mood-btn" onclick="setMood('Happy')"><span>😊</span><small>Happy</small></button>
+            <button class="mood-btn" onclick="setMood('Tired')"><span>🥱</span><small>Tired</small></button>
+            <button class="mood-btn" onclick="setMood('Stressed')"><span>😣</span><small>Stressed</small></button>
+          </div>
+
+          <div class="breath-box">
+            <div class="breath-circle" id="breathCircle">Ready</div>
+            <button class="btn btn-sm btn-outline" id="breathBtn" onclick="toggleBreathing()">Start Box Breathing (4-4-4-4)</button>
+          </div>
+        </div>
+
+        <!-- Steps & Stopwatch -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🏃 Steps & Workout Timer</div>
+            <span class="badge">Goal: 8,000</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="stepsProgressBar" style="width:0%;"></div>
+          </div>
+          <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:0.75rem;">
+            Steps: <strong id="stepsCountText">0</strong> • Calories Burned: <strong id="caloriesBurnedText">0</strong> kcal
+          </p>
+          <div class="inline-form" style="margin-bottom:0.6rem;">
+            <input type="number" id="quickStepsInput" class="input" placeholder="Add steps (e.g., 1500)">
+            <button class="btn btn-sm" onclick="addSteps()">+ Add</button>
+          </div>
+          <div style="display:flex; gap:0.45rem; flex-wrap:wrap; margin-bottom:1rem;">
+            <button class="btn btn-sm btn-outline" onclick="quickAddSteps(1000)">+1,000</button>
+            <button class="btn btn-sm btn-outline" onclick="quickAddSteps(2500)">+2,500</button>
+            <button class="btn btn-sm btn-outline" onclick="resetDailyData()">Reset Today</button>
+          </div>
+
+          <div style="padding:0.85rem; background:var(--surface-alt); border:1px solid var(--border); border-radius:12px; text-align:center;">
+            <small style="color:var(--text-muted); font-weight:600;">Workout Stopwatch</small>
+            <div id="stopwatchDisplay" style="font-size:1.55rem; font-weight:800; margin:0.25rem 0;">00:00:00</div>
+            <div style="display:flex; justify-content:center; gap:0.5rem;">
+              <button class="btn btn-sm" onclick="toggleStopwatch()" id="swStartBtn">Start</button>
+              <button class="btn btn-sm btn-outline" onclick="resetStopwatch()">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weekly Chart -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📊 7-Day Wellness Score</div>
+            <span class="badge">Weekly Trend</span>
+          </div>
+          <p style="font-size:0.84rem; color:var(--text-muted);">Combines daily water goal, routine completion, and activity.</p>
+          <div class="chart-bars" id="weeklyChart"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 2: NUTRITION & FITNESS ==================== -->
+    <section id="view-trackers" class="view">
+      <h2 style="margin-bottom:1rem;">Nutrition, Macros & Exercise Log</h2>
+      <div class="grid grid-2">
+        <!-- Meals & Macros -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🥗 Meals & Macro Tracker</div>
+            <span class="badge" id="calorieSummaryBadge">0 / 2200 kcal</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="calorieProgressBar" style="width:0%;"></div>
+          </div>
+          <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:0.75rem;" id="macroTotalsText">
+            Protein: 0g • Carbs: 0g • Fats: 0g
+          </p>
+
+          <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.8rem;">
+            <button class="btn btn-sm btn-outline" onclick="quickMeal('Breakfast','Oats & Banana',320,12,56,6)">+ Oats & Banana</button>
+            <button class="btn btn-sm btn-outline" onclick="quickMeal('Lunch','Dal, Rice & Salad',540,20,82,12)">+ Balanced Thali</button>
+            <button class="btn btn-sm btn-outline" onclick="quickMeal('Snack','Greek Yogurt & Nuts',210,15,12,11)">+ Yogurt & Nuts</button>
+          </div>
+
+          <div class="inline-form" style="margin-bottom:0.8rem;">
+            <select id="mealType" class="input" style="max-width:120px;">
+              <option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Snack</option>
+            </select>
+            <input type="text" id="mealName" class="input" placeholder="Food item">
+            <input type="number" id="mealCalories" class="input" placeholder="kcal" style="max-width:85px;">
+            <input type="number" id="mealProtein" class="input" placeholder="Prot(g)" style="max-width:85px;">
+            <button class="btn btn-sm" onclick="addMeal()">Log</button>
+          </div>
+          <div class="list" id="mealList"></div>
+        </div>
+
+        <!-- Workout Log -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🏋️ Workout & Exercise Log</div>
+            <span class="badge" id="workoutTotalBadge">0 mins</span>
+          </div>
+          <div style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.8rem;">
+            <button class="btn btn-sm btn-outline" onclick="quickWorkout('Brisk Walk',30,150)">+ 30m Walk</button>
+            <button class="btn btn-sm btn-outline" onclick="quickWorkout('Yoga Flow',25,110)">+ 25m Yoga</button>
+            <button class="btn btn-sm btn-outline" onclick="quickWorkout('Strength Training',45,280)">+ 45m Gym</button>
+          </div>
+          <div class="inline-form" style="margin-bottom:0.85rem;">
+            <input type="text" id="workoutName" class="input" placeholder="Workout name">
+            <input type="number" id="workoutMins" class="input" placeholder="Mins" style="max-width:80px;">
+            <input type="number" id="workoutKcal" class="input" placeholder="kcal" style="max-width:80px;">
+            <button class="btn btn-sm" onclick="addWorkout()">Add</button>
+          </div>
+          <div class="list" id="workoutList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 3: DOCTORS, VITALS & SYMPTOMS ==================== -->
+    <section id="view-care" class="view">
+      <h2 style="margin-bottom:1rem;">Medical Vitals, Medications & Doctor Appointments</h2>
+      <div class="grid grid-2">
+        <!-- Vitals -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🩺 Body Vitals Tracker</div>
+            <span class="badge">Personal Log</span>
+          </div>
+          <div class="grid" style="grid-template-columns:1fr 1fr; gap:0.65rem; margin-bottom:0.75rem;">
+            <input type="text" id="vitalBp" class="input" placeholder="Blood Pressure (120/80)">
+            <input type="number" id="vitalHr" class="input" placeholder="Heart Rate (bpm)">
+            <input type="number" id="vitalSugar" class="input" placeholder="Blood Sugar (mg/dL)">
+            <input type="number" id="vitalSpo2" class="input" placeholder="Oxygen SpO2 (%)">
+          </div>
+          <button class="btn btn-sm" onclick="saveVitals()">Save Today's Vitals</button>
+          <div id="vitalsDisplay" style="margin-top:0.85rem; padding:0.85rem; border-radius:12px; background:var(--surface-alt); border:1px solid var(--border); font-size:0.9rem;">
+            No vitals recorded yet.
+          </div>
+        </div>
+
+        <!-- Medications -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">💊 Medications & Supplements</div>
+            <span class="badge">Daily Checklist</span>
+          </div>
+          <div class="inline-form" style="margin-bottom:0.85rem;">
+            <input type="text" id="medName" class="input" placeholder="Medicine / Vitamin & Dose">
+            <input type="time" id="medTime" class="input" style="max-width:130px;">
+            <button class="btn btn-sm" onclick="addMed()">Add</button>
+          </div>
+          <div class="list" id="medList"></div>
+        </div>
+
+        <!-- Doctor Booking -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">👨‍⚕️ Book Doctor Consultation</div>
+            <span class="badge">Appointments</span>
+          </div>
+          <div class="form-group">
+            <label>Select Specialist</label>
+            <select id="apptDoctor" class="input">
+              <option>Dr. A. Sharma — General Physician</option>
+              <option>Dr. R. Mehta — Cardiologist</option>
+              <option>Dr. S. Kapoor — Clinical Nutritionist</option>
+              <option>Dr. N. Verma — Dermatologist</option>
+            </select>
+          </div>
+          <div class="inline-form" style="margin-bottom:0.85rem;">
+            <input type="date" id="apptDate" class="input">
+            <input type="time" id="apptTime" class="input" value="10:30">
+            <button class="btn btn-sm" onclick="addAppointment()">Book Slot</button>
+          </div>
+          <div class="list" id="apptList"></div>
+        </div>
+
+        <!-- Quick Symptom & First-Aid Guide -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🚑 Quick Symptom & Care Guide</div>
+            <span class="badge">Reference</span>
+          </div>
+          <div class="form-group">
+            <label>Select a Common Symptom</label>
+            <select id="symptomSelect" class="input" onchange="showSymptomAdvice()">
+              <option value="">-- Choose a symptom --</option>
+              <option value="headache">Headache / Eye Strain</option>
+              <option value="fever">Mild Fever / Fatigue</option>
+              <option value="dehydration">Dizziness / Dehydration</option>
+              <option value="acidity">Acidity / Indigestion</option>
+              <option value="emergency">Chest Pain / Breathing Difficulty</option>
+            </select>
+          </div>
+          <div id="symptomAdvice" style="padding:0.9rem; border-radius:12px; background:var(--surface-alt); border:1px solid var(--border); font-size:0.9rem; color:var(--text-muted);">
+            Select a symptom above to see general self-care tips and when to seek medical help.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 4: CALCULATORS ==================== -->
+    <section id="view-tools" class="view">
+      <h2 style="margin-bottom:1rem;">Health & Fitness Calculators</h2>
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-header"><div class="card-title">⚖️ BMI & Ideal Weight Calculator</div></div>
+          <div class="form-group"><label>Height (cm)</label><input type="number" id="bmiHeight" class="input" value="175"></div>
+          <div class="form-group"><label>Weight (kg)</label><input type="number" id="bmiWeight" class="input" value="70"></div>
+          <button class="btn" onclick="calculateBMI()">Calculate BMI</button>
+          <div id="bmiResult" style="margin-top:1rem; padding:1rem; background:var(--surface-alt); border-radius:12px; border:1px solid var(--border);">
+            Enter your height and weight to view your BMI & healthy weight range.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">🔥 Calorie, Water & Heart Zone Estimator</div></div>
+          <div class="grid" style="grid-template-columns:1fr 1fr; gap:0.75rem;">
+            <div class="form-group"><label>Age</label><input type="number" id="calcAge" class="input" value="25"></div>
+            <div class="form-group"><label>Gender</label>
+              <select id="calcGender" class="input"><option value="male">Male</option><option value="female">Female</option></select>
+            </div>
+            <div class="form-group"><label>Weight (kg)</label><input type="number" id="calcWeight" class="input" value="70"></div>
+            <div class="form-group"><label>Height (cm)</label><input type="number" id="calcHeight" class="input" value="175"></div>
+          </div>
+          <div class="form-group">
+            <label>Activity Level</label>
+            <select id="calcActivity" class="input">
+              <option value="1.2">Sedentary (Desk job)</option>
+              <option value="1.375">Lightly active (1-3 days/wk)</option>
+              <option value="1.55" selected>Moderately active (3-5 days/wk)</option>
+              <option value="1.725">Very active (6-7 days/wk)</option>
+            </select>
+          </div>
+          <button class="btn" onclick="calculateNeeds()">Calculate & Apply Goals</button>
+          <div id="needsResult" style="margin-top:1rem; padding:1rem; background:var(--surface-alt); border-radius:12px; border:1px solid var(--border);">
+            Calculates daily maintenance calories, target water intake, and max heart rate zone.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 5: PROFILE ==================== -->
+    <section id="view-profile" class="view">
+      <div class="card" style="max-width:680px; margin:0 auto;">
+        <div class="card-header">
+          <div class="card-title">👤 Personal Health Profile</div>
+          <span class="badge" id="profileStatusBadge">Guest Mode</span>
+        </div>
+        <form onsubmit="saveProfile(event)">
+          <div class="grid" style="grid-template-columns:1fr 1fr; gap:0.85rem;">
+            <div class="form-group"><label>Full Name</label><input type="text" id="profName" class="input" placeholder="Your name"></div>
+            <div class="form-group"><label>Blood Group</label>
+              <select id="profBlood" class="input">
+                <option>O+</option><option>O-</option><option>A+</option><option>A-</option>
+                <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Age</label><input type="number" id="profAge" class="input" placeholder="e.g. 24"></div>
+            <div class="form-group"><label>Emergency Contact</label><input type="text" id="profEmergency" class="input" placeholder="Phone or email"></div>
+          </div>
+          <div class="form-group"><label>Known Allergies / Medical Notes</label>
+            <textarea id="profNotes" class="input" rows="3" placeholder="e.g., Peanuts, seasonal pollen, asthma inhaler..."></textarea>
+          </div>
+          <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+            <button type="submit" class="btn">Save Health Profile</button>
+            <button type="button" class="btn btn-outline" onclick="exportHealthJSON()">Export Data (JSON)</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 6: CONTACT ==================== -->
+    <section id="view-contact" class="view">
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-header"><div class="card-title">📩 Contact VitalPulse Support</div></div>
+          <p style="color:var(--text-muted); margin-bottom:1rem;">
+            Have questions, feedback, or need help with your health dashboard? Reach out directly via email or send a message using the form.
+          </p>
+          <div style="padding:1rem; border-radius:12px; background:var(--primary-light); margin-bottom:1rem;">
+            <strong style="display:block; margin-bottom:0.2rem;">Official Contact Email:</strong>
+            <a href="mailto:dakshsangwan1919@gmail.com" style="font-weight:700; font-size:1.05rem;">dakshsangwan1919@gmail.com</a>
+          </div>
+          <p style="font-size:0.86rem; color:var(--text-muted);">
+            Support Hours: Monday – Saturday, 9:00 AM – 6:00 PM IST.<br>
+            For medical emergencies, please call your local emergency helpline immediately.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">Send Us a Message</div></div>
+          <form onsubmit="handleContactSubmit(event)">
+            <div class="form-group"><label>Your Name</label><input type="text" id="contactName" class="input" required placeholder="Enter your name"></div>
+            <div class="form-group"><label>Your Email</label><input type="email" id="contactEmail" class="input" required placeholder="you@example.com"></div>
+            <div class="form-group"><label>Message</label><textarea id="contactMsg" class="input" rows="4" required placeholder="Write your message..."></textarea></div>
+            <button type="submit" class="btn" style="width:100%;">Send Email to dakshsangwan1919@gmail.com</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 7: LOGIN & SIGNUP ==================== -->
+    <section id="view-auth" class="view">
+      <div class="auth-container">
+        <div class="card">
+          <div style="text-align:center; margin-bottom:1.15rem;">
+            <div class="brand-icon" style="margin:0 auto 0.55rem;">♥</div>
+            <h2>VitalPulse Account</h2>
+            <p style="font-size:0.88rem; color:var(--text-muted);">Log in or create an account to sync your daily wellness records.</p>
+          </div>
+
+          <div class="auth-tabs">
+            <button class="auth-tab active" id="tabLogin" onclick="switchAuthMode('login')">Login</button>
+            <button class="auth-tab" id="tabSignup" onclick="switchAuthMode('signup')">Sign Up</button>
+          </div>
+
+          <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="loginEmail" class="input" required placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <div class="password-wrap">
+                <input type="password" id="loginPassword" class="input" required placeholder="Enter your password">
+                <button type="button" class="toggle-pw" onclick="togglePw('loginPassword', this)">Show</button>
+              </div>
+            </div>
+            <button type="submit" class="btn" style="width:100%; margin-top:0.4rem;">Login to Dashboard</button>
+
+            <div class="demo-box">
+              <div>
+                <strong>Demo Account:</strong><br>
+                <code>demo@vitalpulse.com</code> / <code>Demo@123</code>
+              </div>
+              <button type="button" class="btn btn-sm" onclick="fillDemoLogin()">Auto-Fill & Login</button>
+            </div>
+          </form>
+
+          <form id="signupForm" style="display:none;" onsubmit="handleSignup(event)">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="signupName" class="input" required placeholder="e.g., Daksh Sangwan">
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="signupEmail" class="input" required placeholder="name@example.com">
+            </div>
+            <div class="form-group">
+              <label>Password (min 6 characters)</label>
+              <div class="password-wrap">
+                <input type="password" id="signupPassword" class="input" minlength="6" required placeholder="Create password">
+                <button type="button" class="toggle-pw" onclick="togglePw('signupPassword', this)">Show</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Confirm Password</label>
+              <input type="password" id="signupConfirm" class="input" minlength="6" required placeholder="Re-enter password">
+            </div>
+            <div class="form-group">
+              <label>Daily Water Goal (ml)</label>
+              <input type="number" id="signupWaterGoal" class="input" value="2500" min="1000" max="6000">
+            </div>
+            <button type="submit" class="btn" style="width:100%; margin-top:0.4rem;">Create Free Account</button>
+          </form>
+
+          <p id="authError" style="color:var(--danger); font-size:0.86rem; margin-top:0.75rem; text-align:center;"></p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p><strong>VitalPulse Healthcare Platform</strong> — Contact: <a href="mailto:dakshsangwan1919@gmail.com">dakshsangwan1919@gmail.com</a></p>
+    <p class="disclaimer">Medical Disclaimer: VitalPulse is designed for personal health tracking and informational purposes only and is not a substitute for professional medical diagnosis or treatment.</p>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ==================== SAFE PASSWORD HASHING ====================
+    async function hashPassword(pw) {
+      if (window.crypto && window.crypto.subtle) {
+        try {
+          const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(pw));
+          return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+        } catch (e) {}
+      }
+      // Deterministic fallback for local file:// environments
+      let h = 5381;
+      for (let i = 0; i < pw.length; i++) h = ((h << 5) + h) + pw.charCodeAt(i);
+      return "fb_" + (h >>> 0).toString(16);
+    }
+
+    // Seed demo user so Login works immediately on first load
+    async function seedDemoUser() {
+      const users = JSON.parse(localStorage.getItem("vp_users")) || [];
+      if (!users.some(u => u.email === "demo@vitalpulse.com")) {
+        users.push({
+          name: "Demo Member",
+          email: "demo@vitalpulse.com",
+          passwordHash: await hashPassword("Demo@123")
+        });
+        localStorage.setItem("vp_users", JSON.stringify(users));
+      }
+    }
+    seedDemoUser();
+
+    // ==================== STATE & STORAGE ====================
+    const DEFAULT_ROUTINES = [
+      { id: 1, text: "Drink 300ml warm water after waking up", time: "Morning", done: false },
+      { id: 2, text: "15 mins morning stretching or sunlight walk", time: "Morning", done: false },
+      { id: 3, text: "Take daily vitamins / prescribed meds", time: "Morning", done: false },
+      { id: 4, text: "Balanced lunch + 10-min walk after meal", time: "Afternoon", done: false },
+      { id: 5, text: "30 mins evening workout or yoga", time: "Evening", done: false },
+      { id: 6, text: "Turn off screens 45 mins before sleep", time: "Night", done: false }
+    ];
+
+    function getDefaultData() {
+      return {
+        water: 0, waterGoal: 2500, calorieGoal: 2200,
+        steps: 0, stepsGoal: 8000, sleepHours: 7.5, mood: "Calm",
+        routines: JSON.parse(JSON.stringify(DEFAULT_ROUTINES)),
+        meals: [], workouts: [],
+        meds: [{ id: 1, name: "Vitamin D3 (1000 IU)", time: "09:00", done: false }],
+        vitals: null, appointments: [],
+        profile: { name: "", blood: "O+", age: "", emergency: "", notes: "" }
+      };
+    }
+
+    let currentUser = JSON.parse(localStorage.getItem("vp_current_user")) || null;
+    let healthData = loadUserData();
+    let routineFilter = "All";
+
+    function getStorageKey() {
+      return currentUser ? `vp_data_${currentUser.email}` : "vp_data_guest";
+    }
+
+    function loadUserData() {
+      const saved = localStorage.getItem(getStorageKey());
+      return saved ? { ...getDefaultData(), ...JSON.parse(saved) } : getDefaultData();
+    }
+
+    function saveUserData() {
+      localStorage.setItem(getStorageKey(), JSON.stringify(healthData));
+      renderAll();
+    }
+
+    // ==================== NAVIGATION & THEME ====================
+    function switchView(viewName) {
+      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+      document.getElementById(`view-${viewName}`).classList.add("active");
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.toggle("active", b.dataset.view === viewName));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+      const isDark = document.body.classList.contains("dark");
+      document.getElementById("themeBtn").textContent = isDark ? "☀️" : "🌙";
+      localStorage.setItem("vp_theme", isDark ? "dark" : "light");
+    }
+    if (localStorage.getItem("vp_theme") === "dark") {
+      document.body.classList.add("dark");
+      document.getElementById("themeBtn").textContent = "☀️";
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 2600);
+    }
+
+    // ==================== AUTHENTICATION ====================
+    function switchAuthMode(mode) {
+      document.getElementById("authError").textContent = "";
+      const isLogin = mode === "login";
+      document.getElementById("loginForm").style.display = isLogin ? "block" : "none";
+      document.getElementById("signupForm").style.display = isLogin ? "none" : "block";
+      document.getElementById("tabLogin").classList.toggle("active", isLogin);
+      document.getElementById("tabSignup").classList.toggle("active", !isLogin);
+    }
+
+    function togglePw(id, btn) {
+      const input = document.getElementById(id);
+      const hidden = input.type === "password";
+      input.type = hidden ? "text" : "password";
+      btn.textContent = hidden ? "Hide" : "Show";
+    }
+
+    async function fillDemoLogin() {
+      await seedDemoUser();
+      document.getElementById("loginEmail").value = "demo@vitalpulse.com";
+      document.getElementById("loginPassword").value = "Demo@123";
+      document.getElementById("loginForm").dispatchEvent(new Event("submit", { cancelable: true }));
+    }
+
+    async function handleSignup(e) {
+      e.preventDefault();
+      const name = document.getElementById("signupName").value.trim();
+      const email = document.getElementById("signupEmail").value.trim().toLowerCase();
+      const pw = document.getElementById("signupPassword").value;
+      const confirmPw = document.getElementById("signupConfirm").value;
+      const waterGoal = parseInt(document.getElementById("signupWaterGoal").value) || 2500;
+
+      if (pw !== confirmPw) {
+        document.getElementById("authError").textContent = "Passwords do not match.";
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem("vp_users")) || [];
+      if (users.some(u => u.email === email)) {
+        document.getElementById("authError").textContent = "Email already registered. Please log in.";
+        return;
+      }
+
+      users.push({ name, email, passwordHash: await hashPassword(pw) });
+      localStorage.setItem("vp_users", JSON.stringify(users));
+
+      currentUser = { name, email };
+      localStorage.setItem("vp_current_user", JSON.stringify(currentUser));
+
+      healthData = getDefaultData();
+      healthData.waterGoal = waterGoal;
+      healthData.profile.name = name;
+      saveUserData();
+      updateAuthUI();
+      showToast(`Account created! Welcome, ${name}`);
+      switchView("dashboard");
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+      const pw = document.getElementById("loginPassword").value;
+      const pwHash = await hashPassword(pw);
+
+      const users = JSON.parse(localStorage.getItem("vp_users")) || [];
+      const found = users.find(u => u.email === email && u.passwordHash === pwHash);
+
+      if (!found) {
+        document.getElementById("authError").textContent = "Invalid email or password.";
+        return;
+      }
+
+      currentUser = { name: found.name, email: found.email };
+      localStorage.setItem("vp_current_user", JSON.stringify(currentUser));
+      healthData = loadUserData();
+      renderAll();
+      updateAuthUI();
+      showToast(`Welcome back, ${found.name}!`);
+      switchView("dashboard");
+    }
+
+    function logout() {
+      currentUser = null;
+      localStorage.removeItem("vp_current_user");
+      healthData = loadUserData();
+      updateAuthUI();
+      renderAll();
+      showToast("Logged out.");
+    }
+
+    function updateAuthUI() {
+      const area = document.getElementById("authHeaderArea");
+      const heading = document.getElementById("welcomeHeading");
+      const profBadge = document.getElementById("profileStatusBadge");
+
+      if (currentUser) {
+        heading.textContent = `Welcome back, ${currentUser.name}`;
+        profBadge.textContent = currentUser.email;
+        area.innerHTML = `
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <span style="font-size:0.86rem; font-weight:600;">👤 ${escapeHtml(currentUser.name)}</span>
+            <button class="btn btn-sm btn-outline" onclick="logout()">Logout</button>
+          </div>`;
+      } else {
+        heading.textContent = "Welcome to VitalPulse Healthcare";
+        profBadge.textContent = "Guest Mode";
+        area.innerHTML = `<button class="btn btn-sm" onclick="switchView('auth')">Login / Sign Up</button>`;
+      }
+    }
+
+    // ==================== WATER TRACKER & REMINDER ====================
+    function addWater(amount) {
+      healthData.water = Math.max(0, healthData.water + amount);
+      saveUserData();
+      showToast(amount > 0 ? `+${amount} ml water logged!` : `Removed ${Math.abs(amount)} ml`);
+    }
+
+    function updateWaterGoal() {
+      const val = parseInt(document.getElementById("waterGoalInput").value);
+      if (!val || val < 500) return showToast("Enter a valid water goal (min 500ml)");
+      healthData.waterGoal = val;
+      document.getElementById("waterGoalInput").value = "";
+      saveUserData();
+      showToast(`Daily water goal set to ${val} ml`);
+    }
+
+    function enableWaterReminder() {
+      if (!("Notification" in window)) return showToast("Reminder set: Drink 250ml every 90 mins!");
+      Notification.requestPermission().then(perm => {
+        if (perm === "granted") {
+          new Notification("VitalPulse Hydration", { body: "Hydration reminders active! Stay hydrated today." });
+          showToast("Hydration notifications enabled!");
+        } else {
+          showToast("Tip: Aim for 1 glass of water every 90 mins!");
+        }
+      });
+    }
+
+    // ==================== DAILY ROUTINE ====================
+    function setRoutineFilter(filter, btn) {
+      routineFilter = filter;
+      document.querySelectorAll("#routineFilters .filter-pill").forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+      renderAll();
+    }
+
+    function addRoutine() {
+      const input = document.getElementById("newRoutineInput");
+      const time = document.getElementById("newRoutineTime").value;
+      const text = input.value.trim();
+      if (!text) return;
+      healthData.routines.push({ id: Date.now(), text, time, done: false });
+      input.value = "";
+      saveUserData();
+      showToast("Routine added!");
+    }
+
+    function toggleRoutine(id) {
+      const r = healthData.routines.find(x => x.id === id);
+      if (r) r.done = !r.done;
+      saveUserData();
+    }
+
+    function deleteRoutine(id) {
+      healthData.routines = healthData.routines.filter(x => x.id !== id);
+      saveUserData();
+    }
+
+    // ==================== SLEEP, MOOD & BREATHING ====================
+    function updateSleep(val) {
+      healthData.sleepHours = parseFloat(val);
+      document.getElementById("sleepSliderVal").textContent = val;
+      document.getElementById("sleepBadge").textContent = `${val} hrs`;
+      localStorage.setItem(getStorageKey(), JSON.stringify(healthData));
+      renderWeeklyChart();
+    }
+
+    function setMood(mood) {
+      healthData.mood = mood;
+      saveUserData();
+      showToast(`Mood logged: ${mood}`);
+    }
+
+    let breathInterval = null;
+    function toggleBreathing() {
+      const circle = document.getElementById("breathCircle");
+      const btn = document.getElementById("breathBtn");
+      if (breathInterval) {
+        clearInterval(breathInterval);
+        breathInterval = null;
+        circle.style.transform = "scale(1)";
+        circle.textContent = "Ready";
+        btn.textContent = "Start Box Breathing (4-4-4-4)";
+        return;
+      }
+      const phases = [
+        { label: "Inhale", scale: "scale(1.22)" },
+        { label: "Hold", scale: "scale(1.22)" },
+        { label: "Exhale", scale: "scale(0.88)" },
+        { label: "Hold", scale: "scale(0.88)" }
+      ];
+      let idx = 0;
+      const runPhase = () => {
+        circle.textContent = phases[idx].label;
+        circle.style.transform = phases[idx].scale;
+        idx = (idx + 1) % phases.length;
+      };
+      runPhase();
+      breathInterval = setInterval(runPhase, 4000);
+      btn.textContent = "Stop Breathing Exercise";
+    }
+
+    // ==================== STEPS & STOPWATCH ====================
+    function addSteps() {
+      const inp = document.getElementById("quickStepsInput");
+      const val = parseInt(inp.value);
+      if (!val || val <= 0) return;
+      healthData.steps += val;
+      inp.value = "";
+      saveUserData();
+      showToast(`+${val.toLocaleString()} steps added!`);
+    }
+
+    function quickAddSteps(val) {
+      healthData.steps += val;
+      saveUserData();
+      showToast(`+${val.toLocaleString()} steps added!`);
+    }
+
+    function resetDailyData() {
+      healthData.water = 0;
+      healthData.steps = 0;
+      healthData.meals = [];
+      healthData.workouts = [];
+      healthData.routines.forEach(r => r.done = false);
+      healthData.meds.forEach(m => m.done = false);
+      saveUserData();
+      showToast("Today's trackers reset!");
+    }
+
+    let swSeconds = 0, swTimer = null;
+    function toggleStopwatch() {
+      const btn = document.getElementById("swStartBtn");
+      if (swTimer) {
+        clearInterval(swTimer);
+        swTimer = null;
+        btn.textContent = "Resume";
+      } else {
+        swTimer = setInterval(() => {
+          swSeconds++;
+          const h = String(Math.floor(swSeconds / 3600)).padStart(2, "0");
+          const m = String(Math.floor((swSeconds % 3600) / 60)).padStart(2, "0");
+          const s = String(swSeconds % 60).padStart(2, "0");
+          document.getElementById("stopwatchDisplay").textContent = `${h}:${m}:${s}`;
+        }, 1000);
+        btn.textContent = "Pause";
+      }
+    }
+    function resetStopwatch() {
+      clearInterval(swTimer);
+      swTimer = null;
+      swSeconds = 0;
+      document.getElementById("stopwatchDisplay").textContent = "00:00:00";
+      document.getElementById("swStartBtn").textContent = "Start";
+    }
+
+    // ==================== MEALS, WORKOUTS, MEDS, DOCTORS, VITALS ====================
+    function addMeal() {
+      const type = document.getElementById("mealType").value;
+      const name = document.getElementById("mealName").value.trim();
+      const calories = parseInt(document.getElementById("mealCalories").value) || 0;
+      const protein = parseInt(document.getElementById("mealProtein").value) || 0;
+      if (!name || calories <= 0) return showToast("Enter food item & calories");
+      healthData.meals.push({ id: Date.now(), type, name, calories, protein, carbs: Math.round(calories*0.12), fat: Math.round(calories*0.03) });
+      document.getElementById("mealName").value = "";
+      document.getElementById("mealCalories").value = "";
+      document.getElementById("mealProtein").value = "";
+      saveUserData();
+      showToast("Meal logged!");
+    }
+    function quickMeal(type, name, calories, protein, carbs, fat) {
+      healthData.meals.push({ id: Date.now(), type, name, calories, protein, carbs, fat });
+      saveUserData();
+      showToast(`${name} added!`);
+    }
+    function deleteMeal(id) { healthData.meals = healthData.meals.filter(m => m.id !== id); saveUserData(); }
+
+    function addWorkout() {
+      const name = document.getElementById("workoutName").value.trim();
+      const mins = parseInt(document.getElementById("workoutMins").value) || 0;
+      const kcal = parseInt(document.getElementById("workoutKcal").value) || 0;
+      if (!name || mins <= 0) return showToast("Enter workout name and minutes");
+      healthData.workouts.push({ id: Date.now(), name, mins, kcal });
+      document.getElementById("workoutName").value = "";
+      document.getElementById("workoutMins").value = "";
+      document.getElementById("workoutKcal").value = "";
+      saveUserData();
+      showToast("Workout logged!");
+    }
+    function quickWorkout(name, mins, kcal) {
+      healthData.workouts.push({ id: Date.now(), name, mins, kcal });
+      saveUserData();
+      showToast(`${name} logged!`);
+    }
+    function deleteWorkout(id) { healthData.workouts = healthData.workouts.filter(w => w.id !== id); saveUserData(); }
+
+    function addMed() {
+      const name = document.getElementById("medName").value.trim();
+      const time = document.getElementById("medTime").value || "08:00";
+      if (!name) return;
+      healthData.meds.push({ id: Date.now(), name, time, done: false });
+      document.getElementById("medName").value = "";
+      saveUserData();
+    }
+    function toggleMed(id) { const m = healthData.meds.find(x => x.id === id); if (m) m.done = !m.done; saveUserData(); }
+    function deleteMed(id) { healthData.meds = healthData.meds.filter(x => x.id !== id); saveUserData(); }
+
+    function saveVitals() {
+      const bp = document.getElementById("vitalBp").value.trim();
+      const hr = document.getElementById("vitalHr").value.trim();
+      const sugar = document.getElementById("vitalSugar").value.trim();
+      const spo2 = document.getElementById("vitalSpo2").value.trim();
+      if (!bp && !hr && !sugar && !spo2) return showToast("Enter at least one vital sign");
+      healthData.vitals = {
+        bp: bp || "--", hr: hr || "--", sugar: sugar || "--", spo2: spo2 || "--",
+        time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+      };
+      saveUserData();
+      showToast("Vitals saved!");
+    }
+
+    function addAppointment() {
+      const doctor = document.getElementById("apptDoctor").value;
+      const date = document.getElementById("apptDate").value;
+      const time = document.getElementById("apptTime").value || "10:30";
+      if (!date) return showToast("Please pick an appointment date");
+      healthData.appointments.push({ id: Date.now(), title: doctor, date, time });
+      saveUserData();
+      showToast("Doctor appointment booked!");
+    }
+    function deleteAppt(id) { healthData.appointments = healthData.appointments.filter(a => a.id !== id); saveUserData(); }
+
+    function showSymptomAdvice() {
+      const val = document.getElementById("symptomSelect").value;
+      const box = document.getElementById("symptomAdvice");
+      const map = {
+        headache: "<strong>Headache / Eye Strain:</strong> Hydrate with 300ml water, rest eyes using the 20-20-20 rule, and dim bright screens. Consult a doctor if severe or persistent.",
+        fever: "<strong>Mild Fever / Fatigue:</strong> Rest, drink oral fluids/electrolytes, and monitor temperature every 4 hours. Seek medical care if fever exceeds 102°F (38.9°C) or lasts >3 days.",
+        dehydration: "<strong>Dizziness / Dehydration:</strong> Sip water with ORS/electrolytes slowly and sit/lie down in a cool area.",
+        acidity: "<strong>Acidity / Indigestion:</strong> Avoid lying down immediately after meals, limit spicy/oily food, and sip lukewarm water.",
+        emergency: "<strong style='color:var(--danger);'>Urgent Warning:</strong> Chest pain or shortness of breath can be a medical emergency. Call emergency services or visit the nearest hospital immediately."
+      };
+      box.innerHTML = map[val] || "Select a symptom above to view guidance.";
+    }
+
+    // ==================== CALCULATORS & PROFILE ====================
+    function calculateBMI() {
+      const hCm = parseFloat(document.getElementById("bmiHeight").value);
+      const w = parseFloat(document.getElementById("bmiWeight").value);
+      if (!hCm || !w) return;
+      const h = hCm / 100;
+      const bmi = (w / (h * h)).toFixed(1);
+      const minW = (18.5 * h * h).toFixed(1);
+      const maxW = (24.9 * h * h).toFixed(1);
+      let cat = "Normal Weight", col = "var(--success)";
+      if (bmi < 18.5) { cat = "Underweight"; col = "var(--warning)"; }
+      else if (bmi >= 25 && bmi < 30) { cat = "Overweight"; col = "var(--warning)"; }
+      else if (bmi >= 30) { cat = "Obesity"; col = "var(--danger)"; }
+      document.getElementById("bmiResult").innerHTML = `
+        <strong style="font-size:1.3rem; color:${col};">BMI: ${bmi} (${cat})</strong><br>
+        Healthy weight range for ${hCm} cm: <strong>${minW} – ${maxW} kg</strong>`;
+    }
+
+    function calculateNeeds() {
+      const age = parseInt(document.getElementById("calcAge").value);
+      const gender = document.getElementById("calcGender").value;
+      const w = parseFloat(document.getElementById("calcWeight").value);
+      const h = parseFloat(document.getElementById("calcHeight").value);
+      const act = parseFloat(document.getElementById("calcActivity").value);
+      if (!age || !w || !h) return;
+
+      const bmr = gender === "male" ? (10*w + 6.25*h - 5*age + 5) : (10*w + 6.25*h - 5*age - 161);
+      const calories = Math.round(bmr * act);
+      const waterMl = Math.round(w * 35);
+      const maxHr = 220 - age;
+
+      healthData.calorieGoal = calories;
+      healthData.waterGoal = waterMl;
+      saveUserData();
+
+      document.getElementById("needsResult").innerHTML = `
+        <strong>Daily Calories:</strong> ${calories} kcal<br>
+        <strong>Target Water:</strong> ${waterMl} ml<br>
+        <strong>Target Cardio HR (60–80%):</strong> ${Math.round(maxHr*0.6)} – ${Math.round(maxHr*0.8)} bpm<br>
+        <small style="color:var(--primary);">✓ Goals updated on your dashboard!</small>`;
+      showToast("Goals updated!");
+    }
+
+    function saveProfile(e) {
+      e.preventDefault();
+      healthData.profile = {
+        name: document.getElementById("profName").value.trim(),
+        blood: document.getElementById("profBlood").value,
+        age: document.getElementById("profAge").value,
+        emergency: document.getElementById("profEmergency").value.trim(),
+        notes: document.getElementById("profNotes").value.trim()
+      };
+      saveUserData();
+      showToast("Health profile saved!");
+    }
+
+    function exportHealthJSON() {
+      const blob = new Blob([JSON.stringify(healthData, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "vitalpulse-health-report.json";
+      a.click();
+      showToast("Health report exported!");
+    }
+
+    // ==================== CONTACT ====================
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById("contactName").value.trim();
+      const email = document.getElementById("contactEmail").value.trim();
+      const msg = document.getElementById("contactMsg").value.trim();
+      const subject = encodeURIComponent(`VitalPulse Support Inquiry from ${name}`);
+      const body = encodeURIComponent(`Name: ${name}\nReply Email: ${email}\n\nMessage:\n${msg}`);
+      window.location.href = `mailto:dakshsangwan1919@gmail.com?subject=${subject}&body=${body}`;
+      showToast("Opening email client to dakshsangwan1919@gmail.com");
+      e.target.reset();
+    }
+
+    // ==================== RENDERING ====================
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+    }
+
+    function renderWeeklyChart() {
+      const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Today"];
+      const wScore = Math.min(100, Math.round((healthData.water / healthData.waterGoal) * 100));
+      const rScore = healthData.routines.length ? Math.round((healthData.routines.filter(r => r.done).length / healthData.routines.length) * 100) : 0;
+      const sScore = Math.min(100, Math.round((healthData.steps / healthData.stepsGoal) * 100));
+      const todayScore = Math.round((wScore * 0.35) + (rScore * 0.4) + (sScore * 0.25));
+
+      document.getElementById("heroScore").textContent = `${todayScore} / 100`;
+      const scores = [70, 82, 74, 88, 79, 85, Math.max(10, todayScore)];
+      document.getElementById("weeklyChart").innerHTML = days.map((d, i) => `
+        <div class="bar-col">
+          <small style="font-size:0.68rem;">${scores[i]}%</small>
+          <div class="bar-fill" style="height:${scores[i]}%;"></div>
+          <small>${d}</small>
+        </div>`).join("");
+    }
+
+    function renderAll() {
+      // Water
+      const waterPct = Math.min(100, Math.round((healthData.water / healthData.waterGoal) * 100));
+      const circ = 339.29;
+      document.getElementById("waterRing").style.strokeDashoffset = circ - (circ * waterPct) / 100;
+      document.getElementById("waterPct").textContent = `${waterPct}%`;
+      document.getElementById("waterFraction").textContent = `${healthData.water} / ${healthData.waterGoal} ml`;
+      document.getElementById("heroWater").textContent = `${healthData.water} ml`;
+      document.getElementById("waterStatusBadge").textContent = waterPct >= 100 ? "Goal Reached! 🎉" : "Keep Hydrating";
+
+      // Routine
+      const totalR = healthData.routines.length;
+      const doneR = healthData.routines.filter(r => r.done).length;
+      const rPct = totalR ? Math.round((doneR / totalR) * 100) : 0;
+      document.getElementById("routineBadge").textContent = `${doneR} / ${totalR} Done`;
+      document.getElementById("routineProgressBar").style.width = `${rPct}%`;
+      document.getElementById("heroRoutine").textContent = `${rPct}%`;
+
+      const filteredR = routineFilter === "All"
+        ? healthData.routines
+        : healthData.routines.filter(r => r.time === routineFilter);
+
+      document.getElementById("routineList").innerHTML = filteredR.length
+        ? filteredR.map(r => `
+          <div class="list-item ${r.done ? 'completed' : ''}">
+            <label class="check-wrap">
+              <input type="checkbox" ${r.done ? 'checked' : ''} onchange="toggleRoutine(${r.id})">
+              <span class="item-label">${escapeHtml(r.text)}</span>
+            </label>
+            <span class="badge">${escapeHtml(r.time)}</span>
+            <button class="btn btn-sm btn-outline" onclick="deleteRoutine(${r.id})">✕</button>
+          </div>`).join("")
+        : `<p style="color:var(--text-muted); font-size:0.88rem;">No habits in this category.</p>`;
+
+      // Sleep & Mood
+      document.getElementById("sleepInput").value = healthData.sleepHours;
+      document.getElementById("sleepSliderVal").textContent = healthData.sleepHours;
+      document.getElementById("sleepBadge").textContent = `${healthData.sleepHours} hrs`;
+      document.querySelectorAll(".mood-btn").forEach(b => b.classList.toggle("active", b.textContent.includes(healthData.mood)));
+
+      // Steps & Calories Burned
+      const stepsPct = Math.min(100, Math.round((healthData.steps / healthData.stepsGoal) * 100));
+      const workoutBurned = healthData.workouts.reduce((s, w) => s + w.kcal, 0);
+      document.getElementById("stepsProgressBar").style.width = `${stepsPct}%`;
+      document.getElementById("stepsCountText").textContent = healthData.steps.toLocaleString();
+      document.getElementById("caloriesBurnedText").textContent = Math.round(healthData.steps * 0.04) + workoutBurned;
+      document.getElementById("heroSteps").textContent = healthData.steps.toLocaleString();
+
+      // Meals & Macros
+      const totalCals = healthData.meals.reduce((s, m) => s + m.calories, 0);
+      const totalProt = healthData.meals.reduce((s, m) => s + (m.protein || 0), 0);
+      const totalCarb = healthData.meals.reduce((s, m) => s + (m.carbs || 0), 0);
+      const totalFat = healthData.meals.reduce((s, m) => s + (m.fat || 0), 0);
+      document.getElementById("calorieSummaryBadge").textContent = `${totalCals} / ${healthData.calorieGoal} kcal`;
+      document.getElementById("calorieProgressBar").style.width = `${Math.min(100, Math.round((totalCals / healthData.calorieGoal) * 100))}%`;
+      document.getElementById("macroTotalsText").textContent = `Protein: ${totalProt}g • Carbs: ${totalCarb}g • Fats: ${totalFat}g`;
+
+      document.getElementById("mealList").innerHTML = healthData.meals.length
+        ? healthData.meals.map(m => `
+          <div class="list-item">
+            <div><strong>${escapeHtml(m.name)}</strong><small style="display:block; color:var(--text-muted);">${escapeHtml(m.type)} • ${m.protein || 0}g protein</small></div>
+            <div style="display:flex; gap:0.45rem; align-items:center;">
+              <span class="badge">${m.calories} kcal</span>
+              <button class="btn btn-sm btn-outline" onclick="deleteMeal(${m.id})">✕</button>
+            </div>
+          </div>`).join("")
+        : `<p style="color:var(--text-muted); font-size:0.88rem;">No meals logged today.</p>`;
+
+      // Workouts
+      const mins = healthData.workouts.reduce((s, w) => s + w.mins, 0);
+      document.getElementById("workoutTotalBadge").textContent = `${mins} mins`;
+      document.getElementById("workoutList").innerHTML = healthData.workouts.length
+        ? healthData.workouts.map(w => `
+          <div class="list-item">
+            <div><strong>${escapeHtml(w.name)}</strong><small style="display:block; color:var(--text-muted);">${w.mins} mins • ${w.kcal} kcal burned</small></div>
+            <button class="btn btn-sm btn-outline" onclick="deleteWorkout(${w.id})">✕</button>
+          </div>`).join("")
+        : `<p style="color:var(--text-muted); font-size:0.88rem;">No workouts logged today.</p>`;
+
+      // Meds
+      document.getElementById("medList").innerHTML = healthData.meds.length
+        ? healthData.meds.map(m => `
+          <div class="list-item ${m.done ? 'completed' : ''}">
+            <label class="check-wrap"><input type="checkbox" ${m.done ? 'checked' : ''} onchange="toggleMed(${m.id})"><span class="item-label">${escapeHtml(m.name)}</span></label>
+            <span class="badge">${escapeHtml(m.time)}</span>
+            <button class="btn btn-sm btn-outline" onclick="deleteMed(${m.id})">✕</button>
+          </div>`).join("")
+        : `<p style="color:var(--text-muted); font-size:0.88rem;">No medications added.</p>`;
+
+      // Vitals & Appointments
+      document.getElementById("vitalsDisplay").innerHTML = healthData.vitals
+        ? `Recorded at <strong>${healthData.vitals.time}</strong>:<br>BP: <strong>${escapeHtml(healthData.vitals.bp)}</strong> mmHg • HR: <strong>${escapeHtml(healthData.vitals.hr)}</strong> bpm • Sugar: <strong>${escapeHtml(healthData.vitals.sugar)}</strong> mg/dL • SpO2: <strong>${escapeHtml(healthData.vitals.spo2)}</strong>%`
+        : "No vitals recorded yet.";
+
+      document.getElementById("apptList").innerHTML = healthData.appointments.length
+        ? healthData.appointments.map(a => `
+          <div class="list-item">
+            <div><strong>${escapeHtml(a.title)}</strong><small style="display:block; color:var(--text-muted);">${escapeHtml(a.date)} at ${escapeHtml(a.time)}</small></div>
+            <button class="btn btn-sm btn-outline" onclick="deleteAppt(${a.id})">✕</button>
+          </div>`).join("")
+        : `<p style="color:var(--text-muted); font-size:0.88rem;">No upcoming appointments.</p>`;
+
+      // Profile fields
+      if (healthData.profile) {
+        document.getElementById("profName").value = healthData.profile.name || (currentUser ? currentUser.name : "");
+        document.getElementById("profBlood").value = healthData.profile.blood || "O+";
+        document.getElementById("profAge").value = healthData.profile.age || "";
+        document.getElementById("profEmergency").value = healthData.profile.emergency || "";
+        document.getElementById("profNotes").value = healthData.profile.notes || "";
+      }
+
+      renderWeeklyChart();
+    }
+
+    // Initialize
+    updateAuthUI();
+    renderAll();
+  </script>
+</body>
+</html>
